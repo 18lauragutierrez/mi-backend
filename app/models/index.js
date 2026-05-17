@@ -10,6 +10,10 @@ import dbConfig from "../config/db.config.js";
 import userModel from "./user.model.js";
 import roleModel from "./role.model.js";
 
+console.log("=== VERIFICACIÓN DE VARIABLE ===");
+console.log("DATABASE_URL es:", process.env.DATABASE_URL ? "SÍ EXISTE" : "ESTÁ INDEFINIDA (UNDEFINED)");
+console.log("=================================");
+
 // Usamos la variable de entorno DATABASE_URL que nos dará Render
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",       // Dialecto para PostgreSQL
