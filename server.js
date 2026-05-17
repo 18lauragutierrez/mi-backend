@@ -1,5 +1,10 @@
 // server.js (Raíz del proyecto)
 import express from "express";
+import path from "path";
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import cors from "cors";
 import db from "./app/models/index.js";
 import authRoutes from "./app/routes/auth.routes.js";
@@ -30,14 +35,17 @@ db.sequelize.sync({ alter: true }).then(() => {
   console.error('Error al sincronizar la base de datos:', error);
 });
 
-// Ruta simple de bienvenida
-app.get("/", (req, res) => {
-  res.json({ message: "Bienvenido a la aplicación JWT de Grace." });
-});
+// Servir archivos estáticos del frontend React
+app.use(express.static(path.join(__dirname, 'client/dist')));
 
 // Registrar las rutas
 authRoutes(app);
 userRoutes(app);
+
+// Ruta comodín para que React Router maneje las URLs del frontend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/dist/index.html'));
+});
 
 // Configuración del puerto y puesta en marcha del servidor
 const PORT = process.env.PORT || 8080;
